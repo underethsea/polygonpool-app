@@ -72,7 +72,7 @@ function App() {
         <Dapp />
         <div className="boticon">
           <span title="Github">
-            <a href="https://github.com/underethsea/ethwin-app" target="_blank">
+            <a href="https://github.com/underethsea/polygonpool-app/" target="_blank">
               <img src="./images/github.png" className="github" />
             </a>
           </span>
