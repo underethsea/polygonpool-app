@@ -1106,7 +1106,7 @@ async function getStats() {
                 &nbsp;{Separator(parseInt(poolInfo?.prizepool))}</td>
               </tr>
               <tr><td>Prize APR</td>
-              <td style={{ textAlign: "right" }}>{(100*(52.14((poolInfo.prizepool -
+              <td style={{ textAlign: "right" }}>{(100*(52.14*((poolInfo.prizepool -
                                   poolInfo.TICKETTotalSupply -
                                   poolInfo.SPONSORSHIPTotalSupply)) / poolInfo.TICKETTotalSupply)).toFixed(2)}%</td></tr>
 
