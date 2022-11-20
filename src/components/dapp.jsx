@@ -121,13 +121,14 @@ function Dapp() {
     useConnect();
   const signer = useSigner();
 
+  const [withdrawButton,setWithdrawButton] = useState("Withdraw")
   const [balances, setBalances] = useState([
     { TOKEN: BNZERO, TICKET: BNZERO, SPONSORSHIP: BNZERO },
   ]);
   const [poolInfo, setPoolInfo] = useState({});
   const [prizeMap, setPrizeMap] = useState([]);
   const [sponsorMap, setSponsorMap] = useState([]);
-const [prizeGross,setPrizeGross] = useState(0)
+  const [prizeGross,setPrizeGross] = useState(0)
   const [addressValue, setAddressValue] = useState("");
   const [popup, setPopup] = useState(Boolean);
   const [graphInfo, setGraphInfo] = useState([]);
@@ -271,12 +272,12 @@ async function getStats() {
 
   // TODO needs work
   async function calculateExitFee(exitFeeAddress, exitFeeDeposit) {
-    console.log(
-      "exit feee calc fetch",
-      exitFeeAddress,
-      ADDRESS[ChainObject(chain)].TICKET,
-      exitFeeDeposit
-    );
+    // console.log(
+    //   "exit feee calc fetch",
+    //   exitFeeAddress,
+    //   ADDRESS[ChainObject(chain)].TICKET,
+    //   exitFeeDeposit
+    // );
     let exitFee = await CONTRACT[
       ChainObject(chain)
     ].PRIZEPOOL.callStatic.calculateEarlyExitFee(
@@ -522,7 +523,12 @@ async function getStats() {
       console.log(error);
     }
   };
+const startAward = async () => {
 
+}
+const completeAward = async () => {
+
+}
   const depositTo = async () => {
     console.log("input amt ",inputAmount)
     console.log("deposit amounts balance",balances[0].TOKEN," ",balances[0].TOKEN.toString()," ",ethers.utils.parseUnits(inputAmount,18))
@@ -563,6 +569,8 @@ async function getStats() {
   };
 
   const withdrawFrom = async () => {
+    let okToWithdraw = false
+    if(withdrawButton === "OK WITHDRAW WITH FEE") {okToWithdraw = true}
     try {
       let withdrawBalance = 0;
       console.log("withdraw balance", balances[0].TICKET);
@@ -581,7 +589,11 @@ async function getStats() {
           ChainObject(chain)
         ].PRIZESTRATEGY.isRngRequested();
         if (!rngStatus) {
-          withdrawWrite();
+          let exitFee = await calculateExitFee(address,
+            amountFormatForSend(inputAmount))
+            exitFee = exitFee / 1e18
+          if(exitFee > 0 && okToWithdraw === false) {setWalletMessage("FEE " + NumberChop(exitFee) + " POOL");setWithdrawButton("OK WITHDRAW WITH FEE")}
+          else{withdrawWrite();setWithdrawButton("Withdraw")}
         } else {
           setWalletMessage("prize is being awarded");
           console.log("prize is being awarded");
@@ -942,7 +954,29 @@ async function getStats() {
       >
         <center>
           <div className="closeModal close" onClick={() => closeModal()}></div>
+        {modalFocus === "award" && (
+          <div>
+             <div
+                className="closeModal close"
+                onClick={() => closeModal()}
+              ></div>
+              {!isConnected && "Please connect wallet"}
 
+              {isConnected && (
+                <>AWARD PRIZES <br />
+                <button
+                      onClick={() => startAward()}
+                      className="myButton purple-hover"
+                    >Start Award</button>
+                    <button
+                      onClick={() => completeAward()}
+                      className="myButton purple-hover"
+                    >Complete Award</button>
+
+                </>
+              )}
+          </div>
+        )}
           {modalFocus === "wallet" && (
             <div>
               <div
@@ -1236,7 +1270,7 @@ async function getStats() {
                       onClick={() => withdrawFrom()}
                       className="myButton purple-hover"
                     >
-                      WITHDRAW
+                      {withdrawButton}
                     </button>
                   )}
                 </>

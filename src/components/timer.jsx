@@ -7,10 +7,11 @@ const Completionist = () => (
     }}
   >
     &nbsp;
-    <span className="actionButton display-not-block">AWARD PRIZES</span>&nbsp;
+    <span className="actionButton display-not-block" onClick={() => AwardPrizes()}>AWARD PRIZES</span>&nbsp;
   </span>
 );
 
+async function AwardPrizes() {}
 async function openAward() {}
 // export const Timer = (props) => {
 //    return <Countdown date={props.seconds}>
