@@ -121,7 +121,7 @@ function Dapp() {
     useConnect();
   const signer = useSigner();
 
-  const [withdrawButton,setWithdrawButton] = useState("Withdraw")
+  const [withdrawButton,setWithdrawButton] = useState("WITHDRAW")
   const [balances, setBalances] = useState([
     { TOKEN: BNZERO, TICKET: BNZERO, SPONSORSHIP: BNZERO },
   ]);
@@ -593,7 +593,7 @@ const completeAward = async () => {
             amountFormatForSend(inputAmount))
             exitFee = exitFee / 1e18
           if(exitFee > 0 && okToWithdraw === false) {setWalletMessage("FEE " + NumberChop(exitFee) + " POOL");setWithdrawButton("OK WITHDRAW WITH FEE")}
-          else{withdrawWrite();setWithdrawButton("Withdraw")}
+          else{withdrawWrite();setWithdrawButton("WITHDRAW")}
         } else {
           setWalletMessage("prize is being awarded");
           console.log("prize is being awarded");
@@ -686,20 +686,20 @@ const completeAward = async () => {
                     <tr>
                       <td>
                         <center><div className="padding-top">
-                          {/* <img src="images/trophyeth.png" className="trophy"></img>&nbsp; */}
                           <div class="top-title-text">WEEKLY WINNING</div>
                           <span className="top-title">
 
 
-                          
-                            &nbsp;
+                                                    <img src="images/trophypool.png" className="trophy"></img>&nbsp;
+
+                            
                             {!isNaN(poolInfo.prizepool) && (
                                 poolInfo.prizepool -
                                   poolInfo.TICKETTotalSupply -
                                   poolInfo.SPONSORSHIPTotalSupply) === 0 ?
                                   <span><small>No prize currently</small></span> : <span>                         
                                   {/* <img src="/images/pooltoken.png" className="eth-title"></img> */}
-                              {NumberChop(
+                              {!isNaN(poolInfo.prizepool) && NumberChop(
                                 poolInfo.prizepool -
                                   poolInfo.TICKETTotalSupply -
                                   poolInfo.SPONSORSHIPTotalSupply
@@ -884,7 +884,7 @@ const completeAward = async () => {
                                     </td>
                                     <td style={{ textAlign: "right" }}>
                                       <img
-                                        src="/images/trophy.png"
+                                        src="/images/trophyeth.png"
                                         className="trophy-token"
                                       ></img>
                                       &nbsp;
