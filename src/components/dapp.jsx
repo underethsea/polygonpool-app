@@ -37,6 +37,7 @@ import { ABI } from "./abi.jsx";
 
 const BNZERO = ethers.BigNumber.from("0")
 const BNONEWEI = ethers.BigNumber.from("1")
+const NumberOfPrizes = 30;
 
 const ethValue = (amount) => {
   return ethers.utils.formatUnits(amount, 18);
@@ -1202,7 +1203,11 @@ const completeAward = async () => {
               <img src="images/pool.png" className="winner-icon"></img>&nbsp;
 
                 {Separator(parseInt((prizeGross/1e18)))}</td></tr>
-              </table><br></br>
+                </table><br></br>
+                {balances[0]?.TICKET.gt(BNZERO) && <span>
+                Your Weekly Odds 1 in&nbsp;
+                  {NumberChop(1 / (1 - Math.pow((poolInfo?.TICKETTotalSupply - (parseFloat(balances[0]?.TICKET)/1e18)) / poolInfo?.TICKETTotalSupply, NumberOfPrizes)))}</span>}
+              
               
               </div>}
               {modalFocus === "players" && <div><div
