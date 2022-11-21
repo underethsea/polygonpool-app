@@ -9,7 +9,12 @@ export const ABI = {
   ],
   PRIZESTRATEGY: ["function isRngRequested() public view returns (bool)",
   "function prizePeriodRemainingSeconds() external view returns (uint256)",
-  "function numberOfWinners() external view returns (uint256)"],
+  "function numberOfWinners() external view returns (uint256)",
+  "function canStartAward() public view returns (bool)",
+  "function canCompleteAward() public view returns (bool)",
+  "function completeAward() external",
+  "function startAward() external",
+],
 
   PRIZEPOOL: [
     "function depositTo(address to,uint256 amount,address controlledToken,address referrer) external",

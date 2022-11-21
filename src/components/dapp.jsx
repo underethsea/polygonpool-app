@@ -75,7 +75,14 @@ function Dapp() {
       return [{ TOKEN: BNZERO, TICKET: BNZERO, SPONSORSHIP: BNZERO }];
     }
   }
-
+  async function getAwardStatus() {
+    let [canStartAward,canCompleteAward] =  await Promise.all([
+      CONTRACT[ChainObject(chain)].PRIZESTRATEGY.canStartAward(),
+      CONTRACT[ChainObject(chain)].PRIZESTRATEGY.canCompleteAward(),
+    ])
+    console.log("award status",canStartAward,canCompleteAward)
+    setAwardStatus({canStart:canStartAward,canComplete:canCompleteAward})
+  }
   async function getPoolStats() {
     console.log(ChainObject(chain), "getting pool stats");
     let [
@@ -101,7 +108,7 @@ function Dapp() {
       remainingSeconds: parseInt(prizePeriodRemainingSeconds),
       numberOfWinners: parseInt(numberOfWinners)
     };
-    // console.log("stats", poolStats);
+    console.log("stats", poolStats);
     return poolStats;
   }
 
@@ -127,6 +134,7 @@ function Dapp() {
   ]);
   const [poolInfo, setPoolInfo] = useState({});
   const [prizeMap, setPrizeMap] = useState([]);
+  const [awardStatus, setAwardStatus] = useState({})
   const [sponsorMap, setSponsorMap] = useState([]);
   const [prizeGross,setPrizeGross] = useState(0)
   const [addressValue, setAddressValue] = useState("");
@@ -167,9 +175,11 @@ function Dapp() {
   }
 
   async function openAward() {
+    await getAwardStatus();
     setModalFocus("award");
     setIsModalOpen(true);
   }
+ 
   async function openModal() {
     setIsModalOpen(true);
   }
@@ -268,9 +278,6 @@ async function getStats() {
     setIsModalOpen(true);
   }
 
-
-
-  // TODO needs work
   async function calculateExitFee(exitFeeAddress, exitFeeDeposit) {
     // console.log(
     //   "exit feee calc fetch",
@@ -312,6 +319,18 @@ async function getStats() {
       // },
     });
   
+      // ------ START AWARD TRANSACTION CONFIG -------- //  
+      const {
+        config: startAwardConfig,
+        error: startAwardConfigError,
+        isError: isStartAwardConfigError,
+      } = usePrepareContractWrite({
+        
+        addressOrName: ADDRESS[ChainObject(chain)].PRIZESTRATEGY,
+        contractInterface: ABI.PRIZESTRATEGY,
+        functionName: "startAward",
+      });
+
   // ------ DEPOSIT TRANSACTION CONFIG -------- //  
   const {
     config: depositConfig,
@@ -377,6 +396,16 @@ async function getStats() {
     isSuccess: withdrawSuccess,
     isLoading: withdrawLoading,
   } = useContractWrite(withdrawConfig);
+
+  const {
+    write: startAwardWrite,
+    error: startAwardError,
+    isError: isStartAwardError,
+    isIdle: startAwardIdle,
+    data: startAwardData,
+    isSuccess: startAwardSuccess,
+    isLoading: startAwardLoading,
+  } = useContractWrite(startAwardConfig);
 
   const { isFetching: approveFetching, isLoading: approveWaitLoading, isSuccess: approveWaitSuccess } =
     useWaitForTransaction({
@@ -524,8 +553,19 @@ async function getStats() {
     }
   };
 const startAward = async () => {
+  try{
+    startAwardWrite()
+    toast("Starting Award Process", {
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
+  } catch (error) {
+    setWalletMessage("error, see console");
+    console.log(error);
+  }
 
-}
+  }
+
+
 const completeAward = async () => {
 
 }
@@ -749,6 +789,14 @@ const completeAward = async () => {
                             // <Timer seconds={Date.now() + poolInfo?.remainingSeconds * 1000} />
                                            
                           }
+                          {!isNaN(poolInfo?.remainingSeconds) && parseInt(poolInfo?.remainingSeconds) === 0 && 
+                              <span
+                              className="open-wallet"
+                              onClick={() => {
+                                openAward();
+                              }}
+                            ><span className="actionButton display-not-block">AWARD PRIZES</span></span>}
+
                           </div>
                         </center>
                       </td>
@@ -963,17 +1011,22 @@ const completeAward = async () => {
               {!isConnected && "Please connect wallet"}
 
               {isConnected && (
-                <>AWARD PRIZES <br />
+                <>AWARD PRIZES <br /><br />
+                
+                {awardStatus?.canStart === true && <span>
                 <button
                       onClick={() => startAward()}
                       className="myButton purple-hover"
-                    >Start Award</button>
+                    >STEP 1 of 2 START AWARD</button></span>}
+                    {awardStatus?.canComplete === true && <span>
+
                     <button
                       onClick={() => completeAward()}
                       className="myButton purple-hover"
-                    >Complete Award</button>
+                    >STEP 2 of 2 COMPLETE AWARD</button></span>}
 
-                </>
+              
+              </>
               )}
           </div>
         )}
