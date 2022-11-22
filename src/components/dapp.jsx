@@ -1175,7 +1175,7 @@ const completeAward = async () => {
                 
                 <td><span className="winner-address">
                   {winner.winner.substring(0,8)}&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                  {winner.winner.toLowerCase() === address.toLowerCase() && <span>&nbsp;<img src="/images/poolerson.png" className="myaddress" /> </span>}
+                  {winner.winner.toLowerCase() === address?.toLowerCase() && <span>&nbsp;<img src="/images/poolerson.png" className="myaddress" /> </span>}
 
                   </td>
                 <td style={{ textAlign: "right" }}>&nbsp;&nbsp;
@@ -1228,7 +1228,7 @@ const completeAward = async () => {
                 
                 <td><span className="winner-address">
                   {sponsor.account.id.substring(0,8)}</span>
-                  {sponsor.account.id.toLowerCase() === address.toLowerCase() && <span>&nbsp;<img src="/images/poolerson.png" className="myaddress" /> </span>}
+                  {sponsor.account.id.toLowerCase() === address?.toLowerCase() && <span>&nbsp;<img src="/images/poolerson.png" className="myaddress" /> </span>}
 
                   </td>
                 <td style={{ textAlign: "right" }}>&nbsp;&nbsp;&nbsp;&nbsp;
