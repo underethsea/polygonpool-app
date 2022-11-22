@@ -1173,7 +1173,11 @@ const completeAward = async () => {
                 <tr><td>{winner.winner.startsWith("0x7cf2eb") ? <span>GC</span> :
                 <img src="images/trophy.png" className="winner-icon"></img>}</td>
                 
-                <td><span className="winner-address">{winner.winner.substring(0,8)}&nbsp;&nbsp;&nbsp;&nbsp;</span></td>
+                <td><span className="winner-address">
+                  {winner.winner.substring(0,8)}&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                  {winner.winner.toLowerCase() === address.toLowerCase() && <span>&nbsp;<img src="/images/poolerson.png" className="myaddress" /> </span>}
+
+                  </td>
                 <td style={{ textAlign: "right" }}>&nbsp;&nbsp;
                 <img src="images/pool.png" className="winner-icon"></img>&nbsp;
                 <span className="winner-amount">{NumberChop(winner.amount/1e18)}</span></td></tr>)
@@ -1222,7 +1226,11 @@ const completeAward = async () => {
                   {/* <td>{winner.winner.startsWith("0x7cf2eb") ? <span>GC</span> :
                 <img src="images/trophy.png" className="winner-icon"></img>}</td> */}
                 
-                <td><span className="winner-address">{sponsor.account.id.substring(0,8)}</span></td>
+                <td><span className="winner-address">
+                  {sponsor.account.id.substring(0,8)}</span>
+                  {sponsor.account.id.toLowerCase() === address.toLowerCase() && <span>&nbsp;<img src="/images/poolerson.png" className="myaddress" /> </span>}
+
+                  </td>
                 <td style={{ textAlign: "right" }}>&nbsp;&nbsp;&nbsp;&nbsp;
                 <img src="images/pool.png" className="winner-icon"></img>&nbsp;
 

@@ -7,7 +7,7 @@ let query = `query($prizestrategy: String!, $ticket: String!,$sponsorship: Strin
     numberOfWinners,
       prizePeriodEndAt
     },
-    controlledTokenBalances(first:50,orderBy: balance,orderDirection:desc, where:
+    controlledTokenBalances(first:70,orderBy: balance,orderDirection:desc, where:
       {controlledToken:$ticket})
     {account{id},balance},
     prizePools(where:
