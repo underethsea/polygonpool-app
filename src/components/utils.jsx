@@ -73,19 +73,19 @@ export const DecimalsForCount = (number) => {
 
 // for accessing constants by chain id
 export const ChainObject = (chainId) => {
-  try {
-    if (chainId) chainId = chainId.id;
-    if (chainId === 137) {return "POLYGON"}
-    if (chainId === 5) {
-      return "GOERLI";
-    } else if (chainId === 1) {
-      return "ETHEREUM";
-    } else {
-      console.log("chain not recognized", chainId);
-      return "POLYGON";
-    }
-  } catch (error) {
-    console.log("chain set to ethereum on error");
-    return "POLYGON";
-  }
+  return "POLYGON"
+  // try {
+  //   if (chainId) chainId = chainId.id;
+  //   if (chainId === 137) {return "POLYGON"}
+  //   if (chainId === 5) {
+  //     return "GOERLI";
+  //   } else if (chainId === 1) {
+  //     return "ETHEREUM";
+  //   } else {
+  //     return "POLYGON";
+  //   }
+  // } catch (error) {
+  //   console.log("chain set to ethereum on error");
+  //   return "POLYGON";
+  // }
 }
