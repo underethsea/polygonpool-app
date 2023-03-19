@@ -332,6 +332,18 @@ async function getStats() {
         functionName: "startAward",
       });
 
+   // ------ COMPLETE AWARD TRANSACTION CONFIG -------- //  
+      const {
+        config: completeAwardConfig,
+        error: completeAwardConfigError,
+        isError: isCompleteAwardConfigError,
+      } = usePrepareContractWrite({
+        
+        addressOrName: ADDRESS[ChainObject(chain)].PRIZESTRATEGY,
+        contractInterface: ABI.PRIZESTRATEGY,
+        functionName: "completeAward",
+      });
+
   // ------ DEPOSIT TRANSACTION CONFIG -------- //  
   const {
     config: depositConfig,
@@ -410,6 +422,16 @@ async function getStats() {
     isSuccess: startAwardSuccess,
     isLoading: startAwardLoading,
   } = useContractWrite(startAwardConfig);
+  
+  const {
+    write: completeAwardWrite,
+    error: completeAwardError,
+    isError: isCompleteAwardError,
+    isIdle: completeAwardIdle,
+    data: completeAwardData,
+    isSuccess: completeAwardSuccess,
+    isLoading: completeAwardLoading,
+  } = useContractWrite(completeAwardConfig);
 
   const { isFetching: approveFetching, isLoading: approveWaitLoading, isSuccess: approveWaitSuccess } =
     useWaitForTransaction({
@@ -571,6 +593,16 @@ const startAward = async () => {
 
 
 const completeAward = async () => {
+   try{
+    completeAwardWrite()
+    toast("Completing Award Process", {
+      position: toast.POSITION.BOTTOM_RIGHT,
+    });
+  } catch (error) {
+    setWalletMessage("error, see console");
+    console.log(error);
+  }
+
 
 }
   const depositTo = async () => {
